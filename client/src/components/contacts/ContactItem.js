@@ -1,11 +1,18 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Box, Typography, Stack, Grid, Button } from "@mui/material";
 import EmailIcon from "@mui/icons-material/Email";
 import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import ContactContext from "../../context/contact/contactContext";
 
 const ContactItem = ({ contact }) => {
+  const contactContext = useContext(ContactContext);
+  const { deleteContact } = contactContext;
+
+  const onDelete = () => {
+    deleteContact(contact.id);
+  };
   return (
     <Box
       sx={{
@@ -22,10 +29,6 @@ const ContactItem = ({ contact }) => {
         <Grid item>
           <Typography>
             {contact.type === "professional" ? (
-              //   <FormControlLabel
-              //     control={<Checkbox defaultChecked />}
-              //     label="Professional"
-              //   />
               <Typography
                 sx={{
                   background: "#7FBCD2",
@@ -64,7 +67,7 @@ const ContactItem = ({ contact }) => {
       </Grid>
       <Stack spacing={2} direction="row">
         <Button variant="outlined">{<EditIcon />}Edit</Button>
-        <Button variant="outlined" color="error">
+        <Button variant="outlined" color="error" onClick={onDelete}>
           {<DeleteIcon />}Delete
         </Button>
       </Stack>

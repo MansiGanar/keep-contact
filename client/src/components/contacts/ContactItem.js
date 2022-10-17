@@ -8,7 +8,7 @@ import ContactContext from "../../context/contact/contactContext";
 
 const ContactItem = ({ contact }) => {
   const contactContext = useContext(ContactContext);
-  const { deleteContact } = contactContext;
+  const { deleteContact, setCurrent, clearCurrent } = contactContext;
 
   const onDelete = () => {
     deleteContact(contact.id);
@@ -66,7 +66,9 @@ const ContactItem = ({ contact }) => {
         </Grid>
       </Grid>
       <Stack spacing={2} direction="row">
-        <Button variant="outlined">{<EditIcon />}Edit</Button>
+        <Button variant="outlined" onClick={() => setCurrent(contact)}>
+          {<EditIcon />}Edit
+        </Button>
         <Button variant="outlined" color="error" onClick={onDelete}>
           {<DeleteIcon />}Delete
         </Button>

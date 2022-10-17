@@ -10,7 +10,7 @@ const Contacts = () => {
   return (
     <div>
       {contacts.map((contact) => (
-        <Typography>
+        <Typography key={contact.id}>
           <ContactItem key={contact.id} contact={contact} />
         </Typography>
       ))}

@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
   TextField,
   Typography,
@@ -11,12 +11,28 @@ import ContactContext from "../../context/contact/contactContext";
 
 const ContactForm = () => {
   const contactContext = useContext(ContactContext);
+
+  const { addContact, current, clearCurrent } = contactContext;
+
   const [contact, setContact] = useState({
     name: "",
     email: "",
     phone: "",
     type: "personal",
   });
+
+  useEffect(() => {
+    if (current !== null) {
+      setContact(current);
+    } else {
+      setContact({
+        name: "",
+        email: "",
+        phone: "",
+        type: "personal",
+      });
+    }
+  }, [contactContext, current]);
 
   const [selectedValue, setSelectedValue] = useState("personal");
 
@@ -30,7 +46,7 @@ const ContactForm = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    contactContext.addContact(contact);
+    addContact(contact);
     setContact({
       name: "",
       email: "",
@@ -38,17 +54,35 @@ const ContactForm = () => {
       type: "personal",
     });
   };
+
+  const clearAll = () => {
+    clearCurrent();
+  };
+
   return (
     <div>
-      <Typography
-        fontSize={18}
-        sx={{
-          margin: "0.5rem 0",
-          padding: "1rem",
-        }}
-      >
-        Add Contact
-      </Typography>
+      {current ? (
+        <Typography
+          fontSize={18}
+          sx={{
+            margin: "0.5rem 0",
+            padding: "1rem",
+          }}
+        >
+          Edit Contact
+        </Typography>
+      ) : (
+        <Typography
+          fontSize={18}
+          sx={{
+            margin: "0.5rem 0",
+            padding: "1rem",
+          }}
+        >
+          Add Contact
+        </Typography>
+      )}
+
       <Divider />
       <TextField
         sx={{
@@ -85,7 +119,7 @@ const ContactForm = () => {
         label="Phone"
         variant="filled"
         name="phone"
-        value={contact.password}
+        value={contact.phone}
         onChange={onChange}
       />
       <FormControlLabel
@@ -111,9 +145,20 @@ const ContactForm = () => {
           />
         }
       />
-      <Button type="submit" variant="outlined" fullWidth onClick={onSubmit}>
-        Add Contact
-      </Button>
+      {current ? (
+        <Button type="submit" variant="outlined" fullWidth onClick={onSubmit}>
+          Update Contact
+        </Button>
+      ) : (
+        <Button type="submit" variant="outlined" fullWidth onClick={onSubmit}>
+          Add Contact
+        </Button>
+      )}
+      {current && (
+        <Button type="submit" variant="outlined" fullWidth onClick={clearAll}>
+          Clear
+        </Button>
+      )}
     </div>
   );
 };
